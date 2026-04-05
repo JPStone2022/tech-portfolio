@@ -6,3 +6,5 @@ __pycache__/
 db.sqlite3
 tech-portfolio.pem
 
+# Node dependencies
+node_modules/
