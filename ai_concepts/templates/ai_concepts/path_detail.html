@@ -1,4 +1,5 @@
 {% load static %}
+{% load markdown_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,24 +57,24 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <h5 class="text-xs uppercase text-slate-500 font-bold tracking-widest mb-2 border-l-2 border-blue-500 pl-2">Theory</h5>
-                                <p class="text-slate-300 text-sm whitespace-pre-wrap">{{ day.theory_lesson }}</p>
+                                <p class="text-slate-300 text-sm">{{ day.theory_lesson|render_md }}</p>
                             </div>
                             
                             <div>
                                 <h5 class="text-xs uppercase text-slate-500 font-bold tracking-widest mb-2 border-l-2 border-emerald-500 pl-2">Practical Exercise</h5>
-                                <p class="text-slate-300 text-sm whitespace-pre-wrap">{{ day.practical_exercise }}</p>
+                                <p class="text-slate-300 text-sm">{{ day.practical_exercise|render_md }}</p>
                             </div>
                             
                             {% if day.real_world_case_study and day.real_world_case_study != 'None' and day.real_world_case_study != 'N/A' %}
                             <div>
                                 <h5 class="text-xs uppercase text-slate-500 font-bold tracking-widest mb-2 border-l-2 border-purple-500 pl-2">Case Study</h5>
-                                <p class="text-slate-300 text-sm whitespace-pre-wrap">{{ day.real_world_case_study }}</p>
+                                <p class="text-slate-300 text-sm">{{ day.real_world_case_study|render_md }}</p>
                             </div>
                             {% endif %}
                             
                             <div>
                                 <h5 class="text-xs uppercase text-slate-500 font-bold tracking-widest mb-2 border-l-2 border-amber-500 pl-2">Mindset</h5>
-                                <p class="text-slate-300 text-sm whitespace-pre-wrap">{{ day.mindset_focus }}</p>
+                                <p class="text-slate-300 text-sm">{{ day.mindset_focus|render_md }}</p>
                             </div>
                         </div>
 
