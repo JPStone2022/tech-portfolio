@@ -1,0 +1,1 @@
+[2026-04-05 20:06:17] [AI] QA Pass failed for 'Week 1: Foundational AI Knowledge' on 'The Executive AI Automation Playbook'. Falling back to un-audited week.
