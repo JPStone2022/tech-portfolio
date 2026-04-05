@@ -29,6 +29,19 @@
         <div class="relative border-l-2 border-slate-700 ml-3 md:ml-6 space-y-12 pb-12">
 
             <div class="relative pl-8 md:pl-0">
+                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-slate-900"></div>
+                <div class="md:pl-12">
+                    <span class="text-amber-400 text-sm font-bold tracking-widest uppercase">Phase 4</span>
+                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">Asynchronous AI with Celery & Upstash Redis</h3>
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
+                        <p class="mb-4"><strong>The Goal:</strong> Prevent the AI generation script from blocking the main Django server thread, allowing the web app to remain blazing fast while heavy LLM processing happens in the background.</p>
+                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> Deploying the Celery worker to the AWS Linux environment resulted in immediate daemon crashes because the production virtual environment was missing the core <code>ollama</code> dependencies required by the AI script.</p>
+                        <p><strong>The Solution:</strong> Implemented a serverless Redis message broker via Upstash to handle the queue. Diagnosed the Linux <code>systemd</code> daemon crash logs, synced the production dependencies, and successfully detached the AI workload into a non-blocking background process.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="relative pl-8 md:pl-0">
                 <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-slate-900"></div>
                 <div class="md:pl-12">
                     <span class="text-emerald-400 text-sm font-bold tracking-widest uppercase">Phase 3</span>
