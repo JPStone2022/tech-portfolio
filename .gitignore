@@ -8,3 +8,6 @@ tech-portfolio.pem
 
 # Node dependencies
 node_modules/
+
+portfolio/services/orchestrate_ai_learning_generation_regional.py
+data_import/generated_tiered_ai_log.json

@@ -4,15 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Tech Portfolio</title>
+    <title>Enterprise Architecture Portfolio</title>
     <link rel="stylesheet" href="{% static 'portfolio/css/output.css' %}">
 </head>
-<body class="bg-slate-900 text-white h-screen flex items-center justify-center">
-    <div class="text-center">
-        <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
-            System Online (Compiled)
-        </h1>
-        <p class="text-slate-400 text-lg">Django / Postgres / AWS / Tailwind CLI V4</p>
+<body class="bg-slate-900 text-slate-300 min-h-screen p-8 font-sans">
+
+    <div class="max-w-4xl mx-auto">
+        
+        <header class="mb-16 text-center">
+            <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
+                Building an Enterprise AI Engine
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                A live, transparent look at the architecture, struggles, and triumphs of building a production-grade Django application from scratch.
+            </p>
+        </header>
+
+        <div class="mb-12 text-center">
+            <a href="{% url 'ai_concepts:path_list' %}" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all">
+                View the Live AI Course Catalog
+            </a>
+        </div>
+
+        <div class="relative border-l-2 border-slate-700 ml-3 md:ml-6 space-y-12 pb-12">
+
+            <div class="relative pl-8 md:pl-0">
+                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-slate-900"></div>
+                <div class="md:pl-12">
+                    <span class="text-emerald-400 text-sm font-bold tracking-widest uppercase">Phase 3</span>
+                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">AWS Production Deployment & Nginx Routing</h3>
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
+                        <p class="mb-4"><strong>The Goal:</strong> Push the local architecture to a live AWS EC2 instance using a professional Git pipeline and serve it via Gunicorn and Nginx.</p>
+                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> The site went live, but all CSS was missing. Nginx was returning a stubborn <code>404 Not Found</code> for the Tailwind output file, despite the file existing on the server.</p>
+                        <p><strong>The Solution:</strong> After debugging Linux folder permissions and browser caches, a deep-dive directory traversal revealed the issue. Django was compiling static files into a folder named <code>staticfiles</code>, but Nginx was strictly configured to look in a folder named <code>static</code>. Aligning the Nginx alias path with Django's <code>STATIC_ROOT</code> instantly brought the frontend online.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative pl-8 md:pl-0">
+                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-blue-500 ring-4 ring-slate-900"></div>
+                <div class="md:pl-12">
+                    <span class="text-blue-400 text-sm font-bold tracking-widest uppercase">Phase 2</span>
+                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">Integrating the AI Generator</h3>
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
+                        <p class="mb-4"><strong>The Goal:</strong> Migrate a standalone Python/Ollama script into the Django ecosystem to securely generate tiered course data directly into the Neon.tech database.</p>
+                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> Maintaining clean architecture. Dumping raw Python scripts into the root folder is an anti-pattern. We needed a way to execute the logic securely with access to Django's ORM.</p>
+                        <p><strong>The Solution:</strong> Refactored the script using strict Python Dataclasses and converted it into a native <strong>Django Management Command</strong>. This allowed terminal-based execution (<code>python manage.py generate_programs</code>) while perfectly preserving the separation of concerns.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative pl-8 md:pl-0">
+                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-purple-500 ring-4 ring-slate-900"></div>
+                <div class="md:pl-12">
+                    <span class="text-purple-400 text-sm font-bold tracking-widest uppercase">Phase 1</span>
+                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">Foundation: Neon.tech & Tailwind V4</h3>
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
+                        <p class="mb-4"><strong>The Goal:</strong> Establish the core tech stack: Django backend, Neon.tech Serverless PostgreSQL database, and the newly released Tailwind V4 for styling.</p>
+                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> Tailwind V4 introduced a critical infinite-loop bug during the watcher build process, constantly recompiling its own output file.</p>
+                        <p><strong>The Solution:</strong> Implemented strict file-path exclusions using the new <code>@source</code> directives in the CSS entry point, and surgically removed <code>node_modules</code> from Git tracking via cached purging to keep the repository lightweight.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
+
 </body>
 </html>
