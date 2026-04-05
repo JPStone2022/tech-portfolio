@@ -5,3 +5,6 @@ __pycache__/
 .env
 db.sqlite3
 tech-portfolio.pem
+
+# Ignore Tailwind output to prevent V4 infinite loops
+output.css

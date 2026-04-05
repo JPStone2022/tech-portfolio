@@ -1,0 +1,26 @@
+{
+  "name": "tech_portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+"scripts": {
+    "tailwind-watch": "tailwindcss -i ./static_src/input.css -o ./portfolio/static/portfolio/css/output.css --watch",
+    "tailwind-build": "tailwindcss -i ./static_src/input.css -o ./portfolio/static/portfolio/css/output.css --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JPStone2022/tech-portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JPStone2022/tech-portfolio/issues"
+  },
+  "homepage": "https://github.com/JPStone2022/tech-portfolio#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
+    "tailwindcss": "^4.2.2"
+  }
+}
