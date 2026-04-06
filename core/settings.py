@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'affiliates',
     'case_study',
     'contact',
+    'products',
     'django_q'
 ]
 

@@ -13,6 +13,10 @@ try:
 except ImportError:
     OPENAI_AVAILABLE = False
 
+# --- NEW: THE CIRCUIT BREAKER ---
+# Remembers if the Cloud API crashed so we don't keep trying a dead key
+CLOUD_CIRCUIT_TRIPPED = False
+
 def patch_windows_console_emojis():
     """Fixes the Errno 22 crash when printing emojis in the Windows console."""
     _original_print = builtins.print
@@ -82,14 +86,49 @@ def retry_llm_call(max_retries=3, delay=1, fallback=None):
 # ==========================================
 def hybrid_chat(model_name, messages, format_type='json', options=None, local_retries=2):
     """
-    The Hybrid Cloud Fallback Router.
-    Tries local Ollama first. If it returns invalid data or truncates the array,
-    it seamlessly routes the exact same prompt to OpenAI for a rescue operation.
+    The True Hybrid Router with a Circuit Breaker.
     """
+    global CLOUD_CIRCUIT_TRIPPED # Bring the global variable into the function
+    
     temperature = options.get('temperature', 0.7) if options else 0.7
     num_predict = options.get('num_predict', 3000) if options else 3000
 
-    # 1. Attempt Local Ollama Call multiple times before spending money
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+
+    # 1. CLOUD FIRST (Only if the key exists AND the circuit hasn't tripped)
+    if OPENAI_AVAILABLE and openai_api_key and not CLOUD_CIRCUIT_TRIPPED:
+        try:
+            print("      🚀 [ROUTER] OPENAI_API_KEY detected. Routing directly to OpenAI...")
+            client = OpenAI(api_key=openai_api_key)
+            
+            completion_kwargs = {
+                "model": "gpt-4o-mini",
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": num_predict,
+            }
+            
+            if format_type == 'json':
+                completion_kwargs["response_format"] = {"type": "json_object"}
+            
+            response = client.chat.completions.create(**completion_kwargs)
+            cloud_content = response.choices[0].message.content
+            
+            if format_type == 'json' and not extract_json_from_text(cloud_content):
+                 raise ValueError("OpenAI returned malformed JSON.")
+            
+            print("      ✅ [ROUTER] OpenAI Generation Successful!")
+            return {'message': {'content': cloud_content}}
+            
+        except Exception as e:
+            # THE CIRCUIT TRIPS HERE!
+            CLOUD_CIRCUIT_TRIPPED = True
+            print(f"      🛑 [ROUTER] OpenAI Attempt Failed: {e}.")
+            print("      🔧 [ROUTER] Circuit Breaker TRIPPED. Cloud bypassed for remainder of session.")
+
+
+    # 2. LOCAL HARDWARE FALLBACK
+    print(f"      🖥️ [ROUTER] Engaging Local LLM ({model_name})...")
     for attempt in range(local_retries):
         try:
             response = ollama.chat(
@@ -99,61 +138,22 @@ def hybrid_chat(model_name, messages, format_type='json', options=None, local_re
                 options=options
             )
             
-            # Extract content to verify it didn't completely hallucinate
             content = response.get('message', {}).get('content', '')
             
-            # If we expect JSON, ensure the local model actually returned parseable JSON
             if format_type == 'json' and not extract_json_from_text(content):
                 raise ValueError("Local LLM truncated the array or returned malformed JSON.")
                 
+            print("      ✅ [ROUTER] Local Generation Successful!")
             return response
             
         except Exception as e:
             print(f"      ⚠️  [ROUTER] Local attempt {attempt + 1}/{local_retries} failed: {e}")
             time.sleep(1)
 
-    # 2. LOCAL FAILED. Route to Cloud API Rescue!
-    print("      🚀 [ROUTER] Local model exhausted. Engaging OpenAI (gpt-4o-mini) Rescue...")
-    
-    if not OPENAI_AVAILABLE:
-        print("      ❌ [ROUTER] OpenAI library not installed. Run: pip install openai")
-        raise RuntimeError("OpenAI fallback failed (Not installed).")
+    # 3. COMPLETE SYSTEM FAILURE
+    print("      ❌ [ROUTER] All LLM engines exhausted.")
+    raise RuntimeError("LLM Generation failed across both Cloud and Local engines.")
 
-    openai_api_key = os.environ.get("OPENAI_API_KEY")
-    if not openai_api_key:
-        print("      ❌ [ROUTER] OPENAI_API_KEY environment variable not set in .env")
-        raise RuntimeError("OpenAI fallback failed (No API Key).")
-
-    try:
-        client = OpenAI(api_key=openai_api_key)
-        
-        # OpenAI requires a slightly different keyword structure for JSON enforcement
-        completion_kwargs = {
-            "model": "gpt-4o-mini",
-            "messages": messages,
-            "temperature": temperature,
-            "max_tokens": num_predict,
-        }
-        
-        if format_type == 'json':
-            completion_kwargs["response_format"] = {"type": "json_object"}
-        
-        response = client.chat.completions.create(**completion_kwargs)
-        cloud_content = response.choices[0].message.content
-        
-        print("      ✅ [ROUTER] OpenAI Rescue Successful!")
-        
-        # Format the OpenAI response to perfectly mimic Ollama's dictionary structure!
-        # This ensures your generator scripts don't need to change how they parse the data.
-        return {
-            'message': {
-                'content': cloud_content
-            }
-        }
-        
-    except Exception as e:
-        print(f"      ❌ [ROUTER] OpenAI Rescue Failed: {e}")
-        raise e
     
 
 def log_warning(domain_name, message):

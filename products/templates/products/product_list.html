@@ -1,0 +1,53 @@
+{% extends "portfolio/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-16">
+    <header class="text-center mb-16">
+        <h1 class="text-4xl font-extrabold text-slate-800 dark:text-white mb-4">{{ page_title }}</h1>
+        <p class="text-slate-500 dark:text-slate-400">Our hand-picked selection of top-tier equipment.</p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {% for product in products %}
+        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col transition-transform hover:-translate-y-1">
+            
+            <div class="relative aspect-square p-6 bg-slate-50 dark:bg-slate-700/50 flex items-center justify-center">
+                {% if not product.is_in_stock %}
+                    <div class="absolute inset-0 bg-slate-900/40 z-10 flex items-center justify-center backdrop-blur-[2px]">
+                        <span class="bg-red-600 text-white font-bold px-4 py-1 rounded-full text-sm">OUT OF STOCK</span>
+                    </div>
+                {% endif %}
+                
+                <img src="{{ product.image_url }}" alt="{{ product.title }}" 
+                     class="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal {% if not product.is_in_stock %}grayscale opacity-50{% endif %}">
+            </div>
+
+            <div class="p-6 flex flex-col flex-grow">
+                <p class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-2">{{ product.merchant }}</p>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-2 leading-tight">{{ product.title }}</h3>
+                
+                <div class="mt-auto pt-6 flex items-center justify-between">
+                    <span class="text-2xl font-black text-slate-800 dark:text-white">
+                        {% if product.price %}£{{ product.price }}{% else %}--{% endif %}
+                    </span>
+                    
+                    {% if product.is_in_stock %}
+                        <a href="{{ product.buy_url }}" target="_blank" rel="nofollow noopener" 
+                           class="bg-pt-accent hover:bg-amber-500 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-md">
+                            Buy Now
+                        </a>
+                    {% else %}
+                        <button disabled class="bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold py-2 px-6 rounded-lg cursor-not-allowed">
+                            Unavailable
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

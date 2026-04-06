@@ -162,7 +162,7 @@ def study_portal(request, slug, week_num, day_num):
 def trigger_generation(request):
     if request.method == 'POST':
         # 1. Check Rate Limit (e.g., Max 2 custom generations per user)
-        if TechBootcamp.objects.filter(created_by=request.user).count() >= 2:
+        if TechBootcamp.objects.filter(created_by=request.user).count() >= 20:
             return JsonResponse({"error": "Limit Reached. You can only generate 2 custom programs."}, status=403)
             
         data = json.loads(request.body)
