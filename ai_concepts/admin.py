@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AILearningPath, AIPathWeek, AIPathDay
+from .models import AILearningPath, AIPathWeek, AIPathDay, TechBootcamp, BootcampWeek, BootcampDay
 
 @admin.register(AILearningPath)
 class AILearningPathAdmin(admin.ModelAdmin):
@@ -18,4 +18,22 @@ class AIPathWeekAdmin(admin.ModelAdmin):
 class AIPathDayAdmin(admin.ModelAdmin):
     list_display = ('week', 'day_number', 'title')
     list_filter = ('week__path',)
+    search_fields = ('title', 'theory_lesson')
+
+@admin.register(TechBootcamp)
+class TechBootcampAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'level', 'is_published') # Added 'category'
+    list_filter = ('category', 'is_published', 'level')           # Added 'category'
+    prepopulated_fields = {'slug': ('title',)}
+
+@admin.register(BootcampWeek)
+class BootcampWeekAdmin(admin.ModelAdmin):
+    list_display = ('bootcamp', 'week_number', 'title')
+    list_filter = ('bootcamp',)
+    search_fields = ('title', 'focus')
+
+@admin.register(BootcampDay)
+class BootcampDayAdmin(admin.ModelAdmin):
+    list_display = ('week', 'day_number', 'title')
+    list_filter = ('week__bootcamp',)
     search_fields = ('title', 'theory_lesson')

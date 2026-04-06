@@ -6,12 +6,12 @@ import builtins
 from functools import wraps
 import ollama
 
-# # Attempt to load OpenAI, but don't crash the Django server if it isn't installed
-# try:
-#     from openai import OpenAI
-#     OPENAI_AVAILABLE = True
-# except ImportError:
-#     OPENAI_AVAILABLE = False
+# Attempt to load OpenAI, but don't crash the Django server if it isn't installed
+try:
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+except ImportError:
+    OPENAI_AVAILABLE = False
 
 def patch_windows_console_emojis():
     """Fixes the Errno 22 crash when printing emojis in the Windows console."""
@@ -77,83 +77,83 @@ def retry_llm_call(max_retries=3, delay=1, fallback=None):
     return decorator
 
 
-# # ==========================================
-# # ENTERPRISE HYBRID ROUTER
-# # ==========================================
-# def hybrid_chat(model_name, messages, format_type='json', options=None, local_retries=2):
-#     """
-#     The Hybrid Cloud Fallback Router.
-#     Tries local Ollama first. If it returns invalid data or truncates the array,
-#     it seamlessly routes the exact same prompt to OpenAI for a rescue operation.
-#     """
-#     temperature = options.get('temperature', 0.7) if options else 0.7
-#     num_predict = options.get('num_predict', 3000) if options else 3000
+# ==========================================
+# ENTERPRISE HYBRID ROUTER
+# ==========================================
+def hybrid_chat(model_name, messages, format_type='json', options=None, local_retries=2):
+    """
+    The Hybrid Cloud Fallback Router.
+    Tries local Ollama first. If it returns invalid data or truncates the array,
+    it seamlessly routes the exact same prompt to OpenAI for a rescue operation.
+    """
+    temperature = options.get('temperature', 0.7) if options else 0.7
+    num_predict = options.get('num_predict', 3000) if options else 3000
 
-#     # 1. Attempt Local Ollama Call multiple times before spending money
-#     for attempt in range(local_retries):
-#         try:
-#             response = ollama.chat(
-#                 model=model_name, 
-#                 messages=messages, 
-#                 format=format_type, 
-#                 options=options
-#             )
+    # 1. Attempt Local Ollama Call multiple times before spending money
+    for attempt in range(local_retries):
+        try:
+            response = ollama.chat(
+                model=model_name, 
+                messages=messages, 
+                format=format_type, 
+                options=options
+            )
             
-#             # Extract content to verify it didn't completely hallucinate
-#             content = response.get('message', {}).get('content', '')
+            # Extract content to verify it didn't completely hallucinate
+            content = response.get('message', {}).get('content', '')
             
-#             # If we expect JSON, ensure the local model actually returned parseable JSON
-#             if format_type == 'json' and not extract_json_from_text(content):
-#                 raise ValueError("Local LLM truncated the array or returned malformed JSON.")
+            # If we expect JSON, ensure the local model actually returned parseable JSON
+            if format_type == 'json' and not extract_json_from_text(content):
+                raise ValueError("Local LLM truncated the array or returned malformed JSON.")
                 
-#             return response
+            return response
             
-#         except Exception as e:
-#             print(f"      ⚠️  [ROUTER] Local attempt {attempt + 1}/{local_retries} failed: {e}")
-#             time.sleep(1)
+        except Exception as e:
+            print(f"      ⚠️  [ROUTER] Local attempt {attempt + 1}/{local_retries} failed: {e}")
+            time.sleep(1)
 
-#     # 2. LOCAL FAILED. Route to Cloud API Rescue!
-#     print("      🚀 [ROUTER] Local model exhausted. Engaging OpenAI (gpt-4o-mini) Rescue...")
+    # 2. LOCAL FAILED. Route to Cloud API Rescue!
+    print("      🚀 [ROUTER] Local model exhausted. Engaging OpenAI (gpt-4o-mini) Rescue...")
     
-#     if not OPENAI_AVAILABLE:
-#         print("      ❌ [ROUTER] OpenAI library not installed. Run: pip install openai")
-#         raise RuntimeError("OpenAI fallback failed (Not installed).")
+    if not OPENAI_AVAILABLE:
+        print("      ❌ [ROUTER] OpenAI library not installed. Run: pip install openai")
+        raise RuntimeError("OpenAI fallback failed (Not installed).")
 
-#     openai_api_key = os.environ.get("OPENAI_API_KEY")
-#     if not openai_api_key:
-#         print("      ❌ [ROUTER] OPENAI_API_KEY environment variable not set in .env")
-#         raise RuntimeError("OpenAI fallback failed (No API Key).")
+    openai_api_key = os.environ.get("OPENAI_API_KEY")
+    if not openai_api_key:
+        print("      ❌ [ROUTER] OPENAI_API_KEY environment variable not set in .env")
+        raise RuntimeError("OpenAI fallback failed (No API Key).")
 
-#     try:
-#         client = OpenAI(api_key=openai_api_key)
+    try:
+        client = OpenAI(api_key=openai_api_key)
         
-#         # OpenAI requires a slightly different keyword structure for JSON enforcement
-#         completion_kwargs = {
-#             "model": "gpt-4o-mini",
-#             "messages": messages,
-#             "temperature": temperature,
-#             "max_tokens": num_predict,
-#         }
+        # OpenAI requires a slightly different keyword structure for JSON enforcement
+        completion_kwargs = {
+            "model": "gpt-4o-mini",
+            "messages": messages,
+            "temperature": temperature,
+            "max_tokens": num_predict,
+        }
         
-#         if format_type == 'json':
-#             completion_kwargs["response_format"] = {"type": "json_object"}
+        if format_type == 'json':
+            completion_kwargs["response_format"] = {"type": "json_object"}
         
-#         response = client.chat.completions.create(**completion_kwargs)
-#         cloud_content = response.choices[0].message.content
+        response = client.chat.completions.create(**completion_kwargs)
+        cloud_content = response.choices[0].message.content
         
-#         print("      ✅ [ROUTER] OpenAI Rescue Successful!")
+        print("      ✅ [ROUTER] OpenAI Rescue Successful!")
         
-#         # Format the OpenAI response to perfectly mimic Ollama's dictionary structure!
-#         # This ensures your generator scripts don't need to change how they parse the data.
-#         return {
-#             'message': {
-#                 'content': cloud_content
-#             }
-#         }
+        # Format the OpenAI response to perfectly mimic Ollama's dictionary structure!
+        # This ensures your generator scripts don't need to change how they parse the data.
+        return {
+            'message': {
+                'content': cloud_content
+            }
+        }
         
-#     except Exception as e:
-#         print(f"      ❌ [ROUTER] OpenAI Rescue Failed: {e}")
-#         raise e
+    except Exception as e:
+        print(f"      ❌ [ROUTER] OpenAI Rescue Failed: {e}")
+        raise e
     
 
 def log_warning(domain_name, message):

@@ -29,6 +29,32 @@
         <div class="relative border-l-2 border-slate-700 ml-3 md:ml-6 space-y-12 pb-12">
 
             <div class="relative pl-8 md:pl-0">
+                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-indigo-500 ring-4 ring-slate-900"></div>
+                <div class="md:pl-12">
+                    <span class="text-indigo-400 text-sm font-bold tracking-widest uppercase">Phase 6</span>
+                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">The Unified Catalog UI & Dynamic Filtering</h3>
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
+                        <p class="mb-4"><strong>The Goal:</strong> Expose the massive database of AI-generated tech bootcamps to the public via a seamless, filterable frontend interface.</p>
+                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> Rendering complex, highly relational data structures without overloading the database with N+1 query inefficiencies, while maintaining strict, aesthetic UI rules across varying content lengths.</p>
+                        <p><strong>The Solution:</strong> Built a dynamic Tailwind CSS Grid powered by Django's ORM query parameters. Implemented category-based URL routing (<code>?category=DS</code>) that effortlessly filters the Master Database without requiring separate templates or hardcoded views. The result is a blazing fast, composable UI that dynamically adapts to AI, Data Science, and Engineering content.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative pl-8 md:pl-0">
+                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-pink-500 ring-4 ring-slate-900"></div>
+                <div class="md:pl-12">
+                    <span class="text-pink-400 text-sm font-bold tracking-widest uppercase">Phase 5</span>
+                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">Architectural Refactor: The Master AI Engine</h3>
+                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
+                        <p class="mb-4"><strong>The Goal:</strong> Eliminate severe technical debt by consolidating four disparate, massive Python generation scripts (AI, Data Science, Backend, General Tech) into a single, highly modular pipeline.</p>
+                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> The codebase was violating the DRY (Don't Repeat Yourself) principle. Updating a database model or a Celery task required hunting down and editing identical code across four separate 600-line files, drastically increasing the risk of deployment bugs.</p>
+                        <p><strong>The Solution:</strong> Executed a massive architectural refactor utilizing the <strong>Strategy Design Pattern</strong>. Built a single <code>UniversalDayPlan</code> dataclass and a master <code>TOPIC_CONFIG</code> map. This reduced ~3,500 lines of redundant, procedural code into a sleek ~800-line Master Engine that can be triggered dynamically via CLI flags (<code>--topic DS</code>). The database was similarly normalized, shifting from multiple app silos into one unified <code>TechBootcamp</code> model.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative pl-8 md:pl-0">
                 <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-slate-900"></div>
                 <div class="md:pl-12">
                     <span class="text-amber-400 text-sm font-bold tracking-widest uppercase">Phase 4</span>
@@ -40,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="relative pl-8 md:pl-0">
                 <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-slate-900"></div>
                 <div class="md:pl-12">

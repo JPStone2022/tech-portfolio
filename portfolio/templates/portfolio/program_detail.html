@@ -1,0 +1,161 @@
+{% load static %}
+{% load markdown_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ bootcamp.seo_title|default:bootcamp.title }}</title>
+    <link rel="stylesheet" href="{% static 'portfolio/css/output.css' %}">
+</head>
+<body class="bg-slate-900 text-slate-300 min-h-screen font-sans pb-24">
+
+    <header class="relative pt-24 pb-16 text-center border-b border-slate-800 bg-slate-950">
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <a href="{% url 'portfolio:catalog' %}" class="inline-block text-emerald-400 hover:text-emerald-300 mb-8 font-bold">&larr; Back to Catalog</a>
+            
+            <div class="mb-4 flex justify-center gap-2">
+                <span class="bg-blue-900/50 text-blue-400 text-xs font-bold px-3 py-1 rounded border border-blue-800 uppercase tracking-wide">
+                    {{ bootcamp.get_category_display }}
+                </span>
+                {% if bootcamp.level == 'advanced' %}
+                    <span class="bg-rose-900/50 text-rose-400 text-xs font-bold px-3 py-1 rounded border border-rose-800 uppercase tracking-wide">Premium</span>
+                {% endif %}
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6">{{ bootcamp.title }}</h1>
+            <p class="text-xl text-emerald-400 font-mono mb-8">Target Skill: {{ bootcamp.target_skill }}</p>
+            
+            <div class="prose prose-invert prose-emerald max-w-none text-left bg-slate-900/50 p-8 rounded-2xl border border-slate-800">
+                {{ bootcamp.long_description|safe }}
+            </div>
+        </div>
+    </header>
+{% if shop_product %}
+        <div class="mt-24 pt-16 border-t border-slate-800">
+            <h2 class="text-3xl font-bold text-white mb-12 text-center">Enrollment & Required Resources</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                
+                <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-8 flex flex-col shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">
+                        Digital Access
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold text-white mb-2">{{ shop_product.title }}</h3>
+                    {% if shop_product.price %}
+                        <p class="text-3xl font-extrabold text-emerald-400 mb-4">£{{ shop_product.price }}</p>
+                    {% endif %}
+                    
+                    <p class="text-slate-400 mb-8 flex-grow">{{ shop_product.description|default:shop_product.short_description }}</p>
+
+                    {% if shop_product.external_buy_url %}
+                        <a href="{{ shop_product.external_buy_url }}" target="_blank" class="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-blue-500/25">
+                            Purchase Program
+                        </a>
+                    {% else %}
+                        <div>
+                            <button onclick="document.getElementById('demo-msg-{{ shop_product.id }}').classList.toggle('hidden')" class="block w-full text-center bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg hover:shadow-indigo-500/25 focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+                                View Demo Checkout Workflow
+                            </button>
+                            
+                            <div id="demo-msg-{{ shop_product.id }}" class="hidden mt-4 p-4 bg-indigo-900/30 border border-indigo-500/30 rounded-lg text-sm text-indigo-200 shadow-inner">
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-indigo-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <p>
+                                        <strong class="text-indigo-300">Architecture Demo:</strong> In a live production environment, this headless router would securely redirect the user to a Stripe Checkout session hosted on the external PT platform, separating the content engine from the payment gateway.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if shop_product.related_affiliate_product_name and shop_product.related_affiliate_link %}
+                <div class="bg-slate-900 border border-slate-700 rounded-2xl p-8 flex flex-col shadow-xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-amber-500 text-slate-900 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">
+                        Partner Resource
+                    </div>
+
+                    <h3 class="text-xl font-bold text-white mb-4">Required Tooling</h3>
+                    <h4 class="text-lg font-semibold text-emerald-400 mb-2">{{ shop_product.related_affiliate_product_name }}</h4>
+                    
+                    <p class="text-slate-400 text-sm mb-8 flex-grow border-l-2 border-slate-700 pl-4 italic">
+                        "{{ shop_product.affiliate_pitch }}"
+                    </p>
+                    
+                    <a href="{{ shop_product.related_affiliate_link }}" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2">
+                        View Partner Offer
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>
+                {% else %}
+                <div class="bg-slate-900/50 border border-slate-800 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center">
+                    <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-300 mb-2">No External Tools Required</h3>
+                    <p class="text-slate-500 text-sm">This bootcamp utilizes entirely free, open-source software and local environments.</p>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+        {% endif %}
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <h2 class="text-3xl font-bold text-white mb-12 text-center border-b border-slate-800 pb-4">The Curriculum</h2>
+
+        <div class="space-y-16">
+            {% for week in bootcamp.weeks.all|dictsort:"week_number" %}
+            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-8 shadow-xl">
+                
+                <div class="mb-8 border-b border-slate-700 pb-4">
+                    <h3 class="text-2xl font-bold text-emerald-400 mb-2">Week {{ week.week_number }}: {{ week.title }}</h3>
+                    <p class="text-slate-400 font-mono">Focus: {{ week.focus }}</p>
+                </div>
+
+                <div class="space-y-6">
+                    {% for day in week.days.all|dictsort:"day_number" %}
+                    <div class="bg-slate-900 border {% if day.is_rest_day %}border-indigo-900/50{% else %}border-slate-700{% endif %} rounded-xl p-6 transition-all hover:border-emerald-500/50">
+                        
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="bg-slate-800 text-slate-300 w-12 h-12 flex items-center justify-center rounded-lg font-bold text-xl border border-slate-700">
+                                {{ day.day_number }}
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-white">{{ day.title }}</h4>
+                                {% if day.is_rest_day %}
+                                    <span class="text-indigo-400 text-xs font-bold uppercase tracking-wider">Rest & Consolidation Day</span>
+                                {% else %}
+                                    <span class="text-emerald-500 text-xs font-bold uppercase tracking-wider">Active Study Day</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-3 prose prose-invert prose-sm max-w-none">
+                                {{ day.theory_lesson|render_md }}
+                            </div>
+                            <div class="space-y-3 prose prose-invert prose-sm max-w-none">
+                                {{ day.coding_exercise|render_md }}
+                            </div>
+                            <div class="space-y-3 prose prose-invert prose-sm max-w-none">
+                                {{ day.real_world_application|render_md }}
+                            </div>
+                            <div class="space-y-3 prose prose-invert prose-sm max-w-none">
+                                {{ day.mindset_focus|render_md }}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center text-slate-500">Curriculum is still being generated or evaluated.</p>
+            {% endfor %}
+        </div>
+        
+    </main>
+</body>
+</html>
