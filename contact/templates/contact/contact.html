@@ -1,0 +1,127 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}Contact Me | Tech Incubator{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 py-24">
+    <header class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Let's Connect</h1>
+        <p class="text-xl text-slate-400">Whether it's a software engineering role, a freelance project, or just a technical discussion, I'd love to hear from you.</p>
+    </header>
+
+    <div id="contact-success" class="hidden bg-emerald-900/30 border border-emerald-500/50 p-8 rounded-2xl text-center shadow-xl">
+        <div class="w-16 h-16 bg-emerald-500 text-slate-900 rounded-full flex items-center justify-center text-2xl mx-auto mb-6">
+            <i class="fas fa-check"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-white mb-4">Message Sent!</h2>
+        <p class="text-slate-300 mb-8">Thank you for reaching out. I will review your message and get back to you shortly.</p>
+        <button id="send-another-btn" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold py-3 px-8 rounded-lg transition-colors">
+            Send Another Message
+        </button>
+    </div>
+
+    <div id="contact-form-container" class="bg-slate-800/50 border border-slate-700 p-8 md:p-10 rounded-2xl shadow-xl">
+        
+        <div id="contact-errors" class="hidden mb-8 p-4 bg-rose-900/30 border border-rose-500/50 text-rose-300 rounded-lg text-sm"></div>
+
+        <form id="contact-form">
+            {% csrf_token %}
+            
+            <div class="hidden" aria-hidden="true" style="display: none;">
+                {{ form.website }}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-bold text-slate-400 mb-2">Name</label>
+                    {{ form.name }}
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-400 mb-2">Email Address</label>
+                    {{ form.email }}
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-sm font-bold text-slate-400 mb-2">Subject</label>
+                {{ form.subject }}
+            </div>
+
+            <div class="mb-8">
+                <label class="block text-sm font-bold text-slate-400 mb-2">Message</label>
+                {{ form.message }}
+            </div>
+
+            <button type="submit" id="contact-submit-btn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-emerald-900/20 disabled:opacity-50 flex justify-center items-center gap-2">
+                Send Message <i class="fas fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form');
+    const formContainer = document.getElementById('contact-form-container');
+    const successContainer = document.getElementById('contact-success');
+    const errorContainer = document.getElementById('contact-errors');
+    const submitBtn = document.getElementById('contact-submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorContainer.classList.add('hidden');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Sending...';
+        
+        const formData = {
+            name: form.querySelector('[name="name"]').value,
+            email: form.querySelector('[name="email"]').value,
+            subject: form.querySelector('[name="subject"]').value,
+            message: form.querySelector('[name="message"]').value,
+            website: form.querySelector('[name="website"]').value,
+        };
+
+        try {
+            const response = await fetch("{% url 'contact:contact_page' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': form.querySelector('[name="csrfmiddlewaretoken"]').value
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                formContainer.classList.add('hidden');
+                successContainer.classList.remove('hidden');
+                form.reset();
+            } else {
+                let errorHtml = '<ul class="list-disc pl-5">';
+                if (data.errors) {
+                    for (const [field, messages] of Object.entries(data.errors)) {
+                        errorHtml += `<li><strong class="capitalize">${field}:</strong> ${messages[0].message || messages[0]}</li>`;
+                    }
+                } else {
+                    errorHtml += `<li>${data.message || 'An error occurred.'}</li>`;
+                }
+                errorContainer.innerHTML = errorHtml + '</ul>';
+                errorContainer.classList.remove('hidden');
+            }
+        } catch (error) {
+            errorContainer.innerHTML = "Network error. Please try again.";
+            errorContainer.classList.remove('hidden');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Send Message <i class="fas fa-paper-plane"></i>';
+        }
+    });
+
+    document.getElementById('send-another-btn').addEventListener('click', () => {
+        successContainer.classList.add('hidden');
+        formContainer.classList.remove('hidden');
+    });
+});
+</script>
+{% endblock %}

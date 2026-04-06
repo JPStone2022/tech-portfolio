@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 
 from core.models import SluggedModel, FeaturedProductsMixin, InfographicContentMixin, TimestampedModel, ImageMixin, HomepageFeaturedMixin, SEOMixin
 
@@ -23,7 +24,7 @@ class TechBootcamp(ImageMixin, FeaturedProductsMixin, HomepageFeaturedMixin, SEO
     is_paid = models.BooleanField(default=True)
 
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='TECH')
-
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True, related_name='custom_bootcamps')
     class Meta:
         ordering = ['title']
 

@@ -89,8 +89,8 @@ TOPIC_CONFIG = {
         'validator': validate_ai,
         'tiers': [
             {"name": "Basic", "price": 0.99, "is_paid": True, "level": "beginner"},
-            {"name": "Standard", "price": 9.99, "is_paid": True, "level": "intermediate"},
-            {"name": "Premium", "price": 29.99, "is_paid": True, "level": "advanced"}
+            #{"name": "Standard", "price": 9.99, "is_paid": True, "level": "intermediate"},
+            #{"name": "Premium", "price": 29.99, "is_paid": True, "level": "advanced"}
         ]
     },
     'DS': {
@@ -109,8 +109,8 @@ TOPIC_CONFIG = {
         'validator': validate_ds,
         'tiers': [
             {"name": "Basic", "price": 0.99, "is_paid": True, "level": "beginner"},
-            {"name": "Standard", "price": 9.99, "is_paid": True, "level": "intermediate"},
-            {"name": "Premium", "price": 29.99, "is_paid": True, "level": "advanced"}
+            #{"name": "Standard", "price": 9.99, "is_paid": True, "level": "intermediate"},
+            #{"name": "Premium", "price": 29.99, "is_paid": True, "level": "advanced"}
         ]
     },
     'WEB': {
@@ -129,8 +129,8 @@ TOPIC_CONFIG = {
         'validator': validate_backend,
         'tiers': [
             {"name": "Basic", "price": 0.99, "is_paid": True, "level": "beginner"},
-            {"name": "Standard", "price": 9.99, "is_paid": True, "level": "intermediate"},
-            {"name": "Premium", "price": 29.99, "is_paid": True, "level": "advanced"}
+            #{"name": "Standard", "price": 9.99, "is_paid": True, "level": "intermediate"},
+            #{"name": "Premium", "price": 29.99, "is_paid": True, "level": "advanced"}
         ]
     },
     'TECH': {
@@ -149,8 +149,8 @@ TOPIC_CONFIG = {
         'validator': validate_tech,
         'tiers': [
             {"name": "Basic", "price": 0.99, "is_paid": True, "level": "beginner"},
-            {"name": "Standard", "price": 9.99, "is_paid": True, "level": "intermediate"},
-            {"name": "Premium", "price": 29.99, "is_paid": True, "level": "advanced"}
+            #{"name": "Standard", "price": 9.99, "is_paid": True, "level": "intermediate"},
+            #{"name": "Premium", "price": 29.99, "is_paid": True, "level": "advanced"}
         ]
     }
 }

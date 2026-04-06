@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'shop',
     'affiliates',
     'case_study',
+    'contact',
+    'django_q'
 ]
 
 MIDDLEWARE = [
@@ -130,3 +132,28 @@ CELERY_TASK_SERIALIZER = 'json'
 LOGIN_REDIRECT_URL = 'portfolio:dashboard'
 LOGOUT_REDIRECT_URL = 'portfolio:home'
 LOGIN_URL = 'portfolio:login' # Tells the @login_required decorator where to bounce unauthenticated users
+
+# Option 2: SMTP backend (for production - e.g., Gmail, SendGrid, Mailgun, etc.)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com') # e.g., 'smtp.gmail.com' or your provider's SMTP server
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587)) # 587 for TLS, 465 for SSL, 25 for unencrypted (not recommended)
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True' # Use True for port 587
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False') == 'True' # Use True for port 465 (TLS and SSL are mutually exclusive)
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'your_email@example.com') # Your email address or username
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', 'your_password_or_app_password') # ** STORE SECURELY - Use env var! **
+
+# Default email address for 'from' field in emails sent by Django (e.g., error reports)
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
+# Email address for site admins to receive error notifications etc.
+SERVER_EMAIL = os.environ.get('SERVER_EMAIL', EMAIL_HOST_USER)
+ADMIN_EMAIL = os.environ.get('SERVER_EMAIL', EMAIL_HOST_USER)
+
+Q_CLUSTER = {
+    'name': 'portfolio',
+    'workers': 2,
+    'recycle': 500,
+    'timeout': 900,
+    'retry': 960,
+    # Use the cloud URL if available, otherwise it fails gracefully
+    'redis': os.getenv('REDIS_URL', 'redis://localhost:6379'), 
+}

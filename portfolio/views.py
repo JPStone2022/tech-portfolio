@@ -1,7 +1,10 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django_q.tasks import async_task, fetch
 from shop.models import Product as ShopProduct # Import the Shop model
 from shop.models import Purchase
 from case_study.models import TechBootcamp, BootcampWeek, BootcampDay, TechSkill, ProjectFeature
@@ -15,6 +18,11 @@ def home(request):
     }
     return render(request, 'portfolio/home.html', context)
 
+@login_required
+def custom_generator(request):
+    """Serves the frontend UI for users to generate custom AI bootcamps."""
+    # Optional: Check rate limits here too, and pass a flag to the template to disable the form if they are over the limit!
+    return render(request, 'portfolio/generate.html')
 
 
 def catalog(request):
@@ -146,3 +154,47 @@ def study_portal(request, slug, week_num, day_num):
         'current_day': current_day,
     }
     return render(request, 'portfolio/study_portal.html', context)
+
+
+# --- ASYNC GENERATION API VIEWS ---
+
+@login_required
+def trigger_generation(request):
+    if request.method == 'POST':
+        # 1. Check Rate Limit (e.g., Max 2 custom generations per user)
+        if TechBootcamp.objects.filter(created_by=request.user).count() >= 2:
+            return JsonResponse({"error": "Limit Reached. You can only generate 2 custom programs."}, status=403)
+            
+        data = json.loads(request.body)
+        
+        # 2. Dispatch to the background worker immediately!
+        task_id = async_task(
+            'case_study.tasks.generate_user_custom_program', 
+            request.user.id, 
+            data['topic'], 
+            data['experience'], 
+            data['skill'], 
+            data['goal'], 
+            data['time']
+        )
+        
+        # 3. Tell the frontend the job has started
+        return JsonResponse({"message": "Generation started!", "task_id": task_id})
+    
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+@login_required
+def check_task_status(request, task_id):
+    # 'fetch' gets the entire Task object (including success/fail state), not just the result
+    task = fetch(task_id) 
+    
+    if task:
+        if task.success:
+            # Task finished perfectly! Return the slug.
+            return JsonResponse({"status": "complete", "slug": task.result.get('slug')})
+        else:
+            # Task crashed! Stop the frontend from polling forever.
+            return JsonResponse({"status": "failed", "error": str(task.result)})
+    else:
+        # Task is still in the queue / running
+        return JsonResponse({"status": "processing"})

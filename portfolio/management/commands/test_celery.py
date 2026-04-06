@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from ai_concepts.tasks import test_celery_worker 
+from case_study.tasks import test_celery_worker 
 
 class Command(BaseCommand):
     help = 'Sends a dummy ping to test the Celery Redis queue'

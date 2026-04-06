@@ -4,6 +4,9 @@
 @source not "../portfolio/static";
 
 /* Tell Tailwind where to look for your HTML files */
+@source "../affiliates/templates";
 @source "../portfolio/templates";
 @source "../core/templates";
-@source "../ai_concepts/templates";
+@source "../case_study/templates";
+@source "../contact/templates";
+@source "../shop/templates";
