@@ -12,3 +12,4 @@ node_modules/
 
 portfolio/services/orchestrate_ai_learning_generation_regional.py
 script_steps.py
+staticfiles/
