@@ -1,14 +1,9 @@
+{% extends 'portfolio/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Architecture Portfolio</title>
-    <link rel="stylesheet" href="{% static 'portfolio/css/output.css' %}">
-</head>
-<body class="bg-slate-900 text-slate-300 min-h-screen p-8 font-sans">
 
+{% block title %}Enterprise Tech Catalog | Tech Incubator{% endblock %}
+
+{% block content %}
     <div class="max-w-6xl mx-auto">
         
         <header class="mb-16 text-center">
@@ -20,11 +15,7 @@
             </p>
         </header>
 
-        <div class="mb-12 text-center">
-            <a href="{% url 'portfolio:catalog' %}" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all">
-                View the Live AI Course Catalog
-            </a>
-        </div>
+
 <section class="py-24 bg-slate-900 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
@@ -80,95 +71,153 @@
                 {% endfor %}
             </div>
             
-            <div class="text-center mt-12">
-                <a href="{% url 'portfolio:catalog' %}" class="inline-block px-8 py-4 bg-transparent border border-slate-600 hover:border-emerald-500 text-slate-300 hover:text-white font-bold rounded-lg transition-all">
-                    View Full Catalog &rarr;
-                </a>
+
+        <div class="mb-6 mt-12 text-center">
+            <a href="{% url 'portfolio:catalog' %}" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all">
+                View the Live AI Course Catalog
+            </a>
+        </div>
+
+        </div>
+    </section>
+    
+<section class="py-24 bg-slate-950 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="inline-block py-1 px-3 rounded-full bg-emerald-900/50 text-emerald-400 text-xs font-bold tracking-wider mb-4 border border-emerald-500/30">
+                    SYSTEM EVOLUTION
+                </span>
+                <h2 class="text-4xl font-extrabold text-white mb-4">Architecture Roadmap</h2>
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    The ongoing evolution of this platform from a static portfolio to a fully automated, AI-driven SaaS application.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <div class="bg-slate-900 border border-emerald-500/50 p-8 rounded-2xl shadow-xl shadow-emerald-900/20 relative overflow-hidden group hover:border-emerald-400 transition-colors">
+                    <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">Latest Update</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-emerald-500 text-slate-900 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-emerald-500/30 flex-shrink-0">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Phase 8: SaaS Learning Portal & User Auth</h3>
+                    </div>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-400">
+                        <p><strong class="text-white">The Goal:</strong> Wire up Django authentication, user ownership models, and build a secure Student Dashboard to consume unlocked curriculums.</p>
+                        <p><strong class="text-rose-400">The Struggle:</strong> The "SaaS Infinity Loop"—the dashboard linked to the marketing page, which linked back to the dashboard, with no actual private reading interface. Furthermore, Django's default auth routing caused 404 errors on login.</p>
+                        <p><strong class="text-emerald-400">The Solution:</strong> Built a state-aware UI and a secure, two-column interactive Markdown study portal. Resolved routing issues via settings configuration, and utilized <code>{% csrf_token %}</code> protected POST requests for enrollment to prevent web crawlers from flooding the database with fake purchases.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-lg relative overflow-hidden group hover:border-slate-600 transition-colors">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">Completed</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-teal-900/50 text-teal-400 rounded-xl flex items-center justify-center text-xl border border-teal-500/30 flex-shrink-0">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Phase 7: Headless E-Commerce</h3>
+                    </div>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-400">
+                        <p><strong class="text-white">The Goal:</strong> Implement a Composable Commerce architecture, decoupling the educational content engine from monetization and affiliate routing.</p>
+                        <p><strong class="text-rose-400">The Struggle:</strong> Merging data from disparate microservice-style databases (Core, Shop, Affiliates) into a single frontend view without hardcoding relationships, while safely handling missing database records.</p>
+                        <p><strong class="text-emerald-400">The Solution:</strong> Built a dynamic Python bridge linking data via shared slugs. Fixed "Silent Template Failures" by tracing ORM reverse-relationships. Replaced clunky browser alerts with native JavaScript DOM toggles for a seamless, dark-mode showcase routing experience.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-lg relative overflow-hidden group hover:border-slate-600 transition-colors">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">Completed</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-indigo-900/50 text-indigo-400 rounded-xl flex items-center justify-center text-xl border border-indigo-500/30 flex-shrink-0">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Phase 6: Unified Catalog UI</h3>
+                    </div>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-400">
+                        <p><strong class="text-white">The Goal:</strong> Expose the massive database of AI-generated tech bootcamps to the public via a seamless, filterable frontend interface.</p>
+                        <p><strong class="text-rose-400">The Struggle:</strong> Rendering complex, highly relational data structures without overloading the database with N+1 query inefficiencies, while maintaining strict, aesthetic UI rules across varying content lengths.</p>
+                        <p><strong class="text-emerald-400">The Solution:</strong> Built a dynamic Tailwind CSS Grid powered by Django's ORM parameters. Implemented category-based URL routing (<code>?category=DS</code>) that effortlessly filters the Master Database without requiring separate templates or hardcoded views.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-lg relative overflow-hidden group hover:border-slate-600 transition-colors">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">Completed</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-pink-900/50 text-pink-400 rounded-xl flex items-center justify-center text-xl border border-pink-500/30 flex-shrink-0">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Phase 5: Master AI Engine Refactor</h3>
+                    </div>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-400">
+                        <p><strong class="text-white">The Goal:</strong> Eliminate severe technical debt by consolidating four disparate Python generation scripts into a single, highly modular pipeline.</p>
+                        <p><strong class="text-rose-400">The Struggle:</strong> The codebase was violating the DRY principle. Updating a model or Celery task required hunting down code across four separate 600-line files, drastically increasing bug risks.</p>
+                        <p><strong class="text-emerald-400">The Solution:</strong> Executed a massive architectural refactor utilizing the <strong>Strategy Design Pattern</strong>. Reduced ~3,500 lines of procedural code into a sleek ~800-line Master Engine triggered dynamically via CLI flags. Normalized the database into a single <code>TechBootcamp</code> model.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-lg relative overflow-hidden group hover:border-slate-600 transition-colors">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">Completed</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-amber-900/50 text-amber-400 rounded-xl flex items-center justify-center text-xl border border-amber-500/30 flex-shrink-0">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Phase 4: Asynchronous AI</h3>
+                    </div>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-400">
+                        <p><strong class="text-white">The Goal:</strong> Prevent the AI generation script from blocking the main Django server thread, allowing the web app to remain blazing fast.</p>
+                        <p><strong class="text-rose-400">The Struggle:</strong> Deploying the Celery worker to the AWS Linux environment resulted in immediate daemon crashes because the production virtual environment was missing core dependencies.</p>
+                        <p><strong class="text-emerald-400">The Solution:</strong> Implemented a serverless Redis message broker via Upstash to handle the queue. Diagnosed the Linux <code>systemd</code> daemon crash logs, synced dependencies, and successfully detached the AI workload.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-lg relative overflow-hidden group hover:border-slate-600 transition-colors">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">Completed</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-green-900/50 text-green-400 rounded-xl flex items-center justify-center text-xl border border-green-500/30 flex-shrink-0">
+                            <i class="fab fa-aws"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Phase 3: AWS Production Deployment</h3>
+                    </div>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-400">
+                        <p><strong class="text-white">The Goal:</strong> Push the local architecture to a live AWS EC2 instance using a professional Git pipeline and serve it via Gunicorn and Nginx.</p>
+                        <p><strong class="text-rose-400">The Struggle:</strong> The site went live, but all CSS was missing. Nginx was returning a stubborn <code>404 Not Found</code> for the Tailwind output file, despite the file existing. Overwriting Git history with build artifacts caused severe merge conflicts.</p>
+                        <p><strong class="text-emerald-400">The Solution:</strong> Untangled the Git tree by ignoring the <code>staticfiles</code> artifact. Aligned the Nginx alias path with Django's <code>STATIC_ROOT</code>, instantly bringing the frontend online with proper Linux folder permissions.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-lg relative overflow-hidden group hover:border-slate-600 transition-colors">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">Completed</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-blue-900/50 text-blue-400 rounded-xl flex items-center justify-center text-xl border border-blue-500/30 flex-shrink-0">
+                            <i class="fas fa-terminal"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Phase 2: Integrating the AI Generator</h3>
+                    </div>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-400">
+                        <p><strong class="text-white">The Goal:</strong> Migrate a standalone Python/Ollama script into the Django ecosystem to securely generate tiered course data directly into the Neon.tech database.</p>
+                        <p><strong class="text-rose-400">The Struggle:</strong> Maintaining clean architecture. Dumping raw Python scripts into the root folder is an anti-pattern. We needed a way to execute the logic securely with access to Django's ORM.</p>
+                        <p><strong class="text-emerald-400">The Solution:</strong> Refactored the script using strict Python Dataclasses and converted it into a native <strong>Django Management Command</strong>. This allowed terminal-based execution while preserving the separation of concerns.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-lg relative overflow-hidden group hover:border-slate-600 transition-colors">
+                    <div class="absolute top-0 right-0 bg-slate-800 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-widest">Completed</div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 bg-purple-900/50 text-purple-400 rounded-xl flex items-center justify-center text-xl border border-purple-500/30 flex-shrink-0">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Phase 1: Foundation</h3>
+                    </div>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-400">
+                        <p><strong class="text-white">The Goal:</strong> Establish the core tech stack: Django backend, Neon.tech Serverless PostgreSQL database, and the newly released Tailwind V4 for styling.</p>
+                        <p><strong class="text-rose-400">The Struggle:</strong> Tailwind V4 introduced a critical infinite-loop bug during the watcher build process, constantly recompiling its own output file.</p>
+                        <p><strong class="text-emerald-400">The Solution:</strong> Implemented strict file-path exclusions using the new <code>@source</code> directives in the CSS entry point, and surgically removed <code>node_modules</code> from Git tracking to keep the repository clean.</p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
-        <div class="relative border-l-2 border-slate-700 ml-3 md:ml-6 space-y-12 pb-12">
-
-            <div class="relative pl-8 md:pl-0">
-                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-indigo-500 ring-4 ring-slate-900"></div>
-                <div class="md:pl-12">
-                    <span class="text-indigo-400 text-sm font-bold tracking-widest uppercase">Phase 6</span>
-                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">The Unified Catalog UI & Dynamic Filtering</h3>
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
-                        <p class="mb-4"><strong>The Goal:</strong> Expose the massive database of AI-generated tech bootcamps to the public via a seamless, filterable frontend interface.</p>
-                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> Rendering complex, highly relational data structures without overloading the database with N+1 query inefficiencies, while maintaining strict, aesthetic UI rules across varying content lengths.</p>
-                        <p><strong>The Solution:</strong> Built a dynamic Tailwind CSS Grid powered by Django's ORM query parameters. Implemented category-based URL routing (<code>?category=DS</code>) that effortlessly filters the Master Database without requiring separate templates or hardcoded views. The result is a blazing fast, composable UI that dynamically adapts to AI, Data Science, and Engineering content.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative pl-8 md:pl-0">
-                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-pink-500 ring-4 ring-slate-900"></div>
-                <div class="md:pl-12">
-                    <span class="text-pink-400 text-sm font-bold tracking-widest uppercase">Phase 5</span>
-                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">Architectural Refactor: The Master AI Engine</h3>
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
-                        <p class="mb-4"><strong>The Goal:</strong> Eliminate severe technical debt by consolidating four disparate, massive Python generation scripts (AI, Data Science, Backend, General Tech) into a single, highly modular pipeline.</p>
-                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> The codebase was violating the DRY (Don't Repeat Yourself) principle. Updating a database model or a Celery task required hunting down and editing identical code across four separate 600-line files, drastically increasing the risk of deployment bugs.</p>
-                        <p><strong>The Solution:</strong> Executed a massive architectural refactor utilizing the <strong>Strategy Design Pattern</strong>. Built a single <code>UniversalDayPlan</code> dataclass and a master <code>TOPIC_CONFIG</code> map. This reduced ~3,500 lines of redundant, procedural code into a sleek ~800-line Master Engine that can be triggered dynamically via CLI flags (<code>--topic DS</code>). The database was similarly normalized, shifting from multiple app silos into one unified <code>TechBootcamp</code> model.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative pl-8 md:pl-0">
-                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-slate-900"></div>
-                <div class="md:pl-12">
-                    <span class="text-amber-400 text-sm font-bold tracking-widest uppercase">Phase 4</span>
-                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">Asynchronous AI with Celery & Upstash Redis</h3>
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
-                        <p class="mb-4"><strong>The Goal:</strong> Prevent the AI generation script from blocking the main Django server thread, allowing the web app to remain blazing fast while heavy LLM processing happens in the background.</p>
-                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> Deploying the Celery worker to the AWS Linux environment resulted in immediate daemon crashes because the production virtual environment was missing the core <code>ollama</code> dependencies required by the AI script.</p>
-                        <p><strong>The Solution:</strong> Implemented a serverless Redis message broker via Upstash to handle the queue. Diagnosed the Linux <code>systemd</code> daemon crash logs, synced the production dependencies, and successfully detached the AI workload into a non-blocking background process.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative pl-8 md:pl-0">
-                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-slate-900"></div>
-                <div class="md:pl-12">
-                    <span class="text-emerald-400 text-sm font-bold tracking-widest uppercase">Phase 3</span>
-                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">AWS Production Deployment & Nginx Routing</h3>
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
-                        <p class="mb-4"><strong>The Goal:</strong> Push the local architecture to a live AWS EC2 instance using a professional Git pipeline and serve it via Gunicorn and Nginx.</p>
-                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> The site went live, but all CSS was missing. Nginx was returning a stubborn <code>404 Not Found</code> for the Tailwind output file, despite the file existing on the server.</p>
-                        <p><strong>The Solution:</strong> After debugging Linux folder permissions and browser caches, a deep-dive directory traversal revealed the issue. Django was compiling static files into a folder named <code>staticfiles</code>, but Nginx was strictly configured to look in a folder named <code>static</code>. Aligning the Nginx alias path with Django's <code>STATIC_ROOT</code> instantly brought the frontend online.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative pl-8 md:pl-0">
-                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-blue-500 ring-4 ring-slate-900"></div>
-                <div class="md:pl-12">
-                    <span class="text-blue-400 text-sm font-bold tracking-widest uppercase">Phase 2</span>
-                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">Integrating the AI Generator</h3>
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
-                        <p class="mb-4"><strong>The Goal:</strong> Migrate a standalone Python/Ollama script into the Django ecosystem to securely generate tiered course data directly into the Neon.tech database.</p>
-                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> Maintaining clean architecture. Dumping raw Python scripts into the root folder is an anti-pattern. We needed a way to execute the logic securely with access to Django's ORM.</p>
-                        <p><strong>The Solution:</strong> Refactored the script using strict Python Dataclasses and converted it into a native <strong>Django Management Command</strong>. This allowed terminal-based execution (<code>python manage.py generate_programs</code>) while perfectly preserving the separation of concerns.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative pl-8 md:pl-0">
-                <div class="hidden md:block absolute -left-2 top-2 w-4 h-4 rounded-full bg-purple-500 ring-4 ring-slate-900"></div>
-                <div class="md:pl-12">
-                    <span class="text-purple-400 text-sm font-bold tracking-widest uppercase">Phase 1</span>
-                    <h3 class="text-2xl font-bold text-white mt-1 mb-3">Foundation: Neon.tech & Tailwind V4</h3>
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-md">
-                        <p class="mb-4"><strong>The Goal:</strong> Establish the core tech stack: Django backend, Neon.tech Serverless PostgreSQL database, and the newly released Tailwind V4 for styling.</p>
-                        <p class="mb-4 text-rose-300"><strong>The Struggle:</strong> Tailwind V4 introduced a critical infinite-loop bug during the watcher build process, constantly recompiling its own output file.</p>
-                        <p><strong>The Solution:</strong> Implemented strict file-path exclusions using the new <code>@source</code> directives in the CSS entry point, and surgically removed <code>node_modules</code> from Git tracking via cached purging to keep the repository lightweight.</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
     </div>
 
-</body>
-</html>
+{% endblock %}

@@ -33,9 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'portfolio',
-    'ai_concepts',
     'shop',
     'affiliates',
+    'case_study',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +125,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CELERY_BROKER_URL = os.environ.get('REDIS_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+# --- AUTHENTICATION ROUTING ---
+LOGIN_REDIRECT_URL = 'portfolio:dashboard'
+LOGOUT_REDIRECT_URL = 'portfolio:home'
+LOGIN_URL = 'portfolio:login' # Tells the @login_required decorator where to bounce unauthenticated users

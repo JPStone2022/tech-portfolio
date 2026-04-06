@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product
+from .models import Product, Purchase
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -22,3 +22,9 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('related_affiliate_product_name', 'related_affiliate_link', 'affiliate_pitch')
         }),
     )
+
+@admin.register(Purchase)
+class PurchaseAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'purchased_at')
+    list_filter = ('purchased_at',)
+    search_fields = ('user__username', 'product__title')

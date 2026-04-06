@@ -16,11 +16,11 @@ sys.path.append(os.getcwd())
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
 
-from ai_concepts.models import TechBootcamp, BootcampWeek, BootcampDay
+from case_study.models import TechBootcamp, BootcampWeek, BootcampDay
 from shop.models import Product as ShopProduct
 from affiliates.models import AffiliateProduct, ProductVariant, Merchant, AffiliateCategory
 
-from llm_utils import (
+from core.utils.llm_utils import (
     patch_windows_console_emojis, extract_json_from_text, 
     get_spelling_instruction, retry_llm_call, hybrid_chat, log_warning
 )
@@ -418,15 +418,15 @@ def run_auto_generator(topic_key: str, limit: int, weeks: int, locale: str):
         else:
             print(f"  [X] REJECTED: {eval_result[1] if eval_result else 'JSON Error'}")
 
-# ==========================================
-# CLI ENTRY POINT
-# ==========================================
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Unified Tech Masterclass Generator")
-    parser.add_argument('--topic', type=str, required=True, choices=['AI', 'DS', 'WEB', 'TECH'], help="Which topic engine to run")
-    parser.add_argument('--limit', type=int, default=1)
-    parser.add_argument('--weeks', type=int, default=4)
-    parser.add_argument('--locale', type=str, default='both', choices=['uk', 'us', 'both'])
+# # ==========================================
+# # CLI ENTRY POINT
+# # ==========================================
+# if __name__ == "__main__":
+#     parser = argparse.ArgumentParser(description="Unified Tech Masterclass Generator")
+#     parser.add_argument('--topic', type=str, required=True, choices=['AI', 'DS', 'WEB', 'TECH'], help="Which topic engine to run")
+#     parser.add_argument('--limit', type=int, default=1)
+#     parser.add_argument('--weeks', type=int, default=4)
+#     parser.add_argument('--locale', type=str, default='both', choices=['uk', 'us', 'both'])
     
-    args = parser.parse_args()
-    run_auto_generator(args.topic, args.limit, args.weeks, args.locale)
+#     args = parser.parse_args()
+#     run_auto_generator(args.topic, args.limit, args.weeks, args.locale)

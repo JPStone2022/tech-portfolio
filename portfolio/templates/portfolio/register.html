@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create an Account</title>
+    <link rel="stylesheet" href="{% static 'portfolio/css/output.css' %}">
+</head>
+<body class="bg-slate-900 text-slate-300 min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-md w-full bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p class="text-slate-400">Log in to access your tech curriculums.</p>
+        </div>
+        
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            <div class="text-slate-300 prose prose-invert">
+                {{ form.as_p }}
+            </div>
+            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg transition-colors">
+                Sign Up
+            </button>
+        </form>
+        
+        <p class="text-center text-slate-500 mt-6 text-sm">
+            Don't have an account? <a href="{% url 'portfolio:register' %}" class="text-emerald-400 hover:text-emerald-300">Sign up here</a>.
+        </p>
+    </div>
+</body>
+</html>

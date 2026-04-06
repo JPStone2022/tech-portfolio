@@ -1,0 +1,113 @@
+{% extends 'portfolio/base.html' %}
+{% load static %}
+
+{% block title %}Enterprise Tech Catalog | Tech Incubator{% endblock %}
+
+{% block content %}
+
+    <header class="pt-24 pb-16 text-center border-b border-slate-800 bg-slate-950">
+        <div class="max-w-4xl mx-auto px-6">
+            <span class="inline-block py-1 px-3 rounded-full bg-indigo-900/50 text-indigo-400 text-xs font-bold tracking-wider mb-6 border border-indigo-500/30">
+                ENGINEERING OVERVIEW
+            </span>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6">Under the Hood</h1>
+            <p class="text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                This isn't just a portfolio. It's a full-stack, AI-powered application built with a 
+                <strong class="text-emerald-400">Headless Architecture</strong> designed for scalability, content generation, and automated commerce routing.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-16">
+        
+        <section class="mb-24">
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-slate-800 pb-4">The Tech Stack</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+                {% for category_name, category_skills in skills_by_category.items %}
+                <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl shadow-lg">
+                    <h3 class="font-bold text-lg text-emerald-400 mb-6">{{ category_name }}</h3>
+                    <ul class="space-y-4">
+                        {% for skill in category_skills %}
+                        <li class="flex items-start group">
+                            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-slate-900 border border-slate-700 text-slate-400 mr-3 group-hover:border-emerald-500 group-hover:text-emerald-400 transition-colors">
+                                <i class="{{ skill.icon_class }}"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-white text-sm">{{ skill.name }}</p>
+                                {% if skill.description %}
+                                <p class="text-xs text-slate-500 mt-1">{{ skill.description }}</p>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-3xl font-bold text-white mb-8 border-b border-slate-800 pb-4">Technical Challenges & Solutions</h2>
+            
+            <div class="space-y-12">
+                {% for feature in features %}
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden shadow-xl">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+                        
+                        <div class="lg:col-span-4 bg-slate-900/50 p-8 border-r border-slate-700">
+                            <h3 class="text-2xl font-bold text-white mb-4">{{ feature.title }}</h3>
+                            <p class="text-slate-400 mb-8 text-sm leading-relaxed">
+                                {{ feature.description }}
+                            </p>
+                            
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Technologies Leveraged</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    {% for tech in feature.technology_used.all %}
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-800 border border-slate-600 text-emerald-300">
+                                        <i class="{{ tech.icon_class }} mr-1.5"></i> {{ tech.name }}
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-8 p-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+                                
+                                <div class="flex flex-col">
+                                    <div class="flex items-center mb-4">
+                                        <div class="p-2 bg-rose-900/30 border border-rose-800 rounded-lg text-rose-400 mr-3">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <h4 class="font-bold text-white text-lg">The Challenge</h4>
+                                    </div>
+                                    <div class="text-sm text-slate-400 leading-relaxed ml-2">
+                                        {{ feature.challenge|linebreaksbr }}
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col md:border-l border-slate-700 md:pl-8 mt-8 md:mt-0">
+                                    <div class="flex items-center mb-4">
+                                        <div class="p-2 bg-emerald-900/30 border border-emerald-800 rounded-lg text-emerald-400 mr-3">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <h4 class="font-bold text-white text-lg">The Solution</h4>
+                                    </div>
+                                    <div class="text-sm text-slate-400 leading-relaxed ml-2">
+                                        {{ feature.solution|linebreaksbr }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-slate-500 py-12">No architecture case studies added yet. Check the Django Admin!</p>
+                {% endfor %}
+            </div>
+        </section>
+
+    </main>
+{% endblock %}

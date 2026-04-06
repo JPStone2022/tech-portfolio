@@ -1,0 +1,91 @@
+{% extends 'portfolio/base.html' %}
+{% load markdown_filters %}
+
+{% block title %}Enterprise Tech Catalog | Tech Incubator{% endblock %}
+
+{% block content %}
+
+    <aside class="w-full md:w-80 bg-slate-900 border-r border-slate-800 h-screen overflow-y-auto flex-shrink-0 sticky top-0">
+        <div class="p-6 border-b border-slate-800 sticky top-0 bg-slate-900 z-10">
+            <a href="{% url 'portfolio:dashboard' %}" class="text-sm text-slate-500 hover:text-white font-bold mb-4 inline-block">&larr; Back to Dashboard</a>
+            <h2 class="text-xl font-bold text-white">{{ bootcamp.title }}</h2>
+        </div>
+        
+        <nav class="p-4 space-y-6">
+            {% for week in bootcamp.weeks.all|dictsort:"week_number" %}
+            <div>
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 pl-2">Week {{ week.week_number }}</h3>
+                <ul class="space-y-1">
+                    {% for day in week.days.all|dictsort:"day_number" %}
+                    <li>
+                        <a href="{% url 'portfolio:study_portal' bootcamp.slug week.week_number day.day_number %}" 
+                           class="block px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                           {% if current_day.id == day.id %}
+                               bg-emerald-600 text-white shadow-lg shadow-emerald-500/20
+                           {% else %}
+                               text-slate-400 hover:bg-slate-800 hover:text-white
+                           {% endif %}">
+                            Day {{ day.day_number }}: {{ day.title|truncatechars:25 }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </nav>
+    </aside>
+
+    <main class="flex-grow p-6 md:p-12 lg:p-16 h-screen overflow-y-auto">
+        <div class="max-w-4xl mx-auto">
+            
+            <div class="flex items-center gap-2 text-sm font-bold text-emerald-400 mb-8 border-b border-slate-800 pb-4">
+                <span>Week {{ current_week.week_number }}</span>
+                <span class="text-slate-600">/</span>
+                <span>Day {{ current_day.day_number }}</span>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">{{ current_day.title }}</h1>
+            
+            {% if current_day.is_rest_day %}
+                <span class="inline-block bg-indigo-900/50 text-indigo-400 border border-indigo-500/30 text-xs font-bold px-3 py-1 rounded uppercase tracking-wide mb-12">
+                    Rest & Consolidation Day
+                </span>
+            {% else %}
+                <span class="inline-block bg-blue-900/50 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-1 rounded uppercase tracking-wide mb-12">
+                    Active Study Day
+                </span>
+            {% endif %}
+
+            <div class="space-y-12">
+                
+                <section class="bg-slate-900 border border-slate-800 p-8 rounded-2xl prose prose-invert prose-emerald max-w-none shadow-xl">
+                    {{ current_day.theory_lesson|render_md }}
+                </section>
+
+                <section class="bg-slate-900 border border-slate-800 p-8 rounded-2xl prose prose-invert prose-emerald max-w-none shadow-xl">
+                    {{ current_day.coding_exercise|render_md }}
+                </section>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <section class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl prose prose-invert prose-sm max-w-none">
+                        {{ current_day.real_world_application|render_md }}
+                    </section>
+                    
+                    <section class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl prose prose-invert prose-sm max-w-none">
+                        {{ current_day.mindset_focus|render_md }}
+                    </section>
+                </div>
+                
+            </div>
+            
+            <div class="mt-16 pt-8 border-t border-slate-800 text-right">
+                <p class="text-slate-500 text-sm mb-4">Completed this session?</p>
+                <a href="{% url 'portfolio:dashboard' %}" class="inline-block bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-lg transition-colors border border-slate-700">
+                    Save Progress & Return
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+{% endblock %}
