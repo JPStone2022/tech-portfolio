@@ -9,7 +9,7 @@
 </head>
 <body class="bg-slate-900 text-slate-300 min-h-screen p-8 font-sans">
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-6xl mx-auto">
         
         <header class="mb-16 text-center">
             <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
@@ -21,11 +21,72 @@
         </header>
 
         <div class="mb-12 text-center">
-            <a href="{% url 'ai_concepts:path_list' %}" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all">
+            <a href="{% url 'portfolio:catalog' %}" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-blue-500/30 transition-all">
                 View the Live AI Course Catalog
             </a>
         </div>
+<section class="py-24 bg-slate-900 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
+                    Featured AI & Engineering Programs
+                </h2>
+                <p class="text-xl text-slate-400">
+                    Cutting-edge curriculum generated dynamically by our Master Hybrid Engine.
+                </p>
+            </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for bootcamp in featured_programs %}
+                <div class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-colors flex flex-col shadow-xl">
+                    
+                    <div class="h-48 relative bg-slate-900">
+                        {% if bootcamp.static_image_path %}
+                            <img src="{{ bootcamp.static_image_path }}" alt="{{ bootcamp.title }}" class="w-full h-full object-cover opacity-80">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-slate-600 font-mono">No Image</div>
+                        {% endif %}
+                        
+                        <div class="absolute top-4 left-4 flex gap-2">
+                            <span class="bg-slate-900/80 backdrop-blur text-blue-400 text-xs font-bold px-3 py-1 rounded border border-slate-700 uppercase tracking-wide">
+                                {{ bootcamp.get_category_display }}
+                            </span>
+                            {% if bootcamp.level == 'advanced' %}
+                            <span class="bg-rose-500/90 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wide">
+                                Premium
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="p-6 flex-grow flex flex-col">
+                        <h3 class="text-2xl font-bold text-white mb-2">{{ bootcamp.title }}</h3>
+                        <p class="text-emerald-400 font-mono text-sm mb-4 border-b border-slate-700 pb-4">
+                            Target Skill: {{ bootcamp.target_skill }}
+                        </p>
+                        <p class="text-slate-400 text-sm mb-8 flex-grow">
+                            {{ bootcamp.description|truncatewords:20 }}
+                        </p>
+                        
+                        <a href="{% url 'portfolio:program_detail' bootcamp.slug %}" class="block w-full text-center bg-slate-700 hover:bg-emerald-600 text-white font-bold py-3 rounded-lg transition-colors">
+                            View Curriculum
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center py-12">
+                    <p class="text-slate-500 text-lg">No programs generated yet. Run the Master Engine!</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="{% url 'portfolio:catalog' %}" class="inline-block px-8 py-4 bg-transparent border border-slate-600 hover:border-emerald-500 text-slate-300 hover:text-white font-bold rounded-lg transition-all">
+                    View Full Catalog &rarr;
+                </a>
+            </div>
+        </div>
+    </section>
         <div class="relative border-l-2 border-slate-700 ml-3 md:ml-6 space-y-12 pb-12">
 
             <div class="relative pl-8 md:pl-0">

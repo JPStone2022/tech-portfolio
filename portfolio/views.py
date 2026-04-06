@@ -4,7 +4,12 @@ from ai_concepts.models import TechBootcamp
 from shop.models import Product as ShopProduct # Import the Shop model
 
 def home(request):
-    return render(request, 'portfolio/home.html')
+    featured_programs = TechBootcamp.objects.filter(is_published=True).order_by('-id')[:3]
+    context = {
+        'featured_programs': featured_programs,
+        # ... your other context variables ...
+    }
+    return render(request, 'portfolio/home.html', context)
 
 from django.shortcuts import render
 # Make sure to import your unified model from wherever it lives (e.g., case_study)
